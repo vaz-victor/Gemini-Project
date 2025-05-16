@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Assistente Social</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* Para links estilizados como botões */
+            display: inline-block; /* Para links estilizados como botões */
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+        /* Estilos para conteúdo gerado por Markdown (prose) */
+        .prose-styles {
+            color: #374151; /* Cinza escuro para texto */
+            line-height: 1.6;
+        }
+        .prose-styles h1, .prose-styles h2, .prose-styles h3 {
+            color: #1e3a8a; /* Azul escuro para títulos */
+            font-weight: 600;
+            margin-top: 1.2em;
+            margin-bottom: 0.6em;
+        }
+        .prose-styles h1 { font-size: 1.875rem; } /* ~30px */
+        .prose-styles h2 { font-size: 1.5rem; }    /* ~24px */
+        .prose-styles h3 { font-size: 1.25rem; }   /* ~20px */
+
+        .prose-styles p {
+            margin-bottom: 1em;
+        }
+        .prose-styles ul, .prose-styles ol {
+            margin-bottom: 1em;
+            padding-left: 1.75em; /* Mais espaço para marcadores */
+        }
+        .prose-styles ul { list-style-type: disc; }
+        .prose-styles ol { list-style-type: decimal; }
+        .prose-styles li { margin-bottom: 0.5em; }
+        .prose-styles a {
+            color: #2563eb; /* Azul para links */
+            text-decoration: underline;
+        }
+        .prose-styles a:hover {
+            color: #1d4ed8;
+        }
+        .prose-styles strong { font-weight: 600; }
+        .prose-styles em { font-style: italic; }
+        .prose-styles blockquote {
+            border-left: 4px solid #93c5fd; /* Azul claro para borda de citação */
+            padding-left: 1em;
+            margin-left: 0;
+            margin-right: 0;
+            font-style: italic;
+            color: #4b5563; /* Cinza médio para texto de citação */
+        }
+        .prose-styles pre { /* Blocos de código */
+            background-color: #f3f4f6; /* Cinza muito claro */
+            padding: 1em;
+            border-radius: 0.375rem; /* bordas arredondadas */
+            overflow-x: auto;
+        }
+        .prose-styles code { /* Código inline */
+            background-color: #e5e7eb; /* Cinza claro */
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+        .prose-styles table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); /* Sombra sutil */
+        }
+        .prose-styles th, .prose-styles td {
+            border: 1px solid #d1d5db; /* Cinza para bordas da tabela */
+            padding: 0.75rem 1rem; /* Mais padding */
+            text-align: left;
+        }
+        .prose-styles th {
+            background-color: #f9fafb; /* Fundo bem leve para cabeçalhos */
+            font-weight: 600;
+            color: #111827; /* Texto mais escuro para cabeçalhos */
+        }
+        .prose-styles tr:nth-child(even) {
+            background-color: #f9fafb; /* Zebrado sutil para linhas pares */
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+    <div class="container mx-auto max-w-4xl">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-blue-700">Resultados para: <span class="text-blue-900">{{ resultados.localizacao }}</span></h1>
+            <a href="{{ url_for('index') }}" class="btn-secondary">Nova Busca</a>
+        </div>
+
+        {% if resultados.projetos_achados_html %}
+        <div class="card">
+            <div class="card-header">🔎 Projetos e Sugestões Encontrados</div>
+            <div class="prose-styles max-w-none">
+                {{ resultados.projetos_achados_html | safe }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if resultados.organizacao_projetos_html %}
+        <div class="card">
+            <div class="card-header">🗂️ Projetos Organizados por Área</div>
+            <div class="prose-styles max-w-none">
+                {{ resultados.organizacao_projetos_html | safe }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if resultados.csv_disponivel and resultados.csv_filename %}
+        <div class="card text-center">
+            <div class="card-header">📄 Baixar Lista de Projetos (CSV)</div>
+            <p class="text-gray-600 mb-4">
+                Um arquivo CSV (<code class="text-sm bg-gray-200 p-1 rounded">{{ resultados.csv_filename }}</code>) com os detalhes dos projetos está pronto para download.
+            </p>
+            <a href="{{ url_for('download_csv') }}" class="btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                Baixar CSV
+            </a>
+        </div>
+        {% elif resultados.csv_filename %}
+         <div class="card">
+            <div class="card-header">📄 Arquivo CSV</div>
+            <p class="text-gray-600">
+                O agente tentou gerar um arquivo CSV (<code class="text-sm bg-gray-200 p-1 rounded">{{ resultados.csv_filename }}</code>), mas o conteúdo parece estar vazio ou conter apenas o cabeçalho.
+                Isso pode acontecer se nenhum projeto detalhado foi encontrado ou se houve um problema na formatação do CSV pelo agente.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    <footer class="text-center text-sm text-gray-500 mt-8 pb-4">
+        Desenvolvido com Flask e Google Gemini.
+    </footer>
+</body>
+</html>

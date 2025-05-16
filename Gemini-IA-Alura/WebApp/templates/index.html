@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente Social Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Azul acinzentado claro */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* bordas mais arredondadas */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0; /* Borda sutil */
+        }
+        .card-header {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 600;
+            color: #1e3a8a; /* Azul escuro */
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            background-color: #2563eb; /* Azul vibrante */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Azul mais escuro no hover */
+        }
+        .btn-secondary {
+            background-color: #64748b; /* Cinza azulado */
+            color: white;
+            padding: 0.625rem 1.25rem; /* Um pouco menor */
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #475569; /* Cinza mais escuro no hover */
+        }
+        .prose-styles table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .prose-styles th, .prose-styles td {
+            border: 1px solid #cbd5e1; /* Cinza claro para bordas da tabela */
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }
+        .prose-styles th {
+            background-color: #f1f5f9; /* Fundo leve para cabeçalhos de tabela */
+            font-weight: 600;
+        }
+        .prose-styles ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .prose-styles ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+        }
+        .prose-styles li {
+            margin-bottom: 0.25rem;
+        }
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #2563eb; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div class="container mx-auto max-w-2xl w-full">
+        <div class="card text-center">
+            <img src="https://img.icons8.com/fluency/96/conference-call.png" alt="Ícone de Comunidade" class="mx-auto mb-4 h-20 w-20">
+            <h1 class="text-3xl font-bold text-blue-700 mb-2">🚀 Assistente Social Inteligente 🚀</h1>
+            <p class="text-gray-600 mb-6">Encontre e organize projetos sociais na sua região.</p>
+
+            {% if error %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mb-4" role="alert">
+                    <strong class="font-bold">Erro!</strong>
+                    <span class="block sm:inline">{{ error }}</span>
+                </div>
+            {% endif %}
+
+            <form method="POST" id="locationForm" class="space-y-4">
+                <div>
+                    <label for="localizacao" class="block text-sm font-medium text-gray-700 mb-1 text-left">📍 Por favor, digite sua localização (Ex: São Paulo, SP):</label>
+                    <input type="text" id="localizacao" name="localizacao" required
+                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                           value="{{ localizacao_anterior if localizacao_anterior else '' }}">
+                </div>
+                <button type="submit" id="submitButton" class="w-full btn-primary">
+                    Buscar Projetos
+                </button>
+            </form>
+             <div id="loader" class="loader hidden mt-6"></div>
+        </div>
+    </div>
+
+    <footer class="text-center text-sm text-gray-500 mt-8 pb-4">
+        Desenvolvido com Flask e Google Gemini.
+    </footer>
+
+    <script>
+        // Script para mostrar o loader durante o processamento
+        const form = document.getElementById('locationForm');
+        const loader = document.getElementById('loader');
+        const submitButton = document.getElementById('submitButton');
+
+        if (form) {
+            form.addEventListener('submit', function() {
+                // Validação simples
+                const localizacaoInput = document.getElementById('localizacao');
+                if (localizacaoInput && localizacaoInput.value.trim() === '') {
+                    // Não envia e não mostra loader se o campo estiver vazio
+                    // A validação 'required' do HTML deve pegar isso, mas é uma checagem extra.
+                    return;
+                }
+                if (loader) {
+                    loader.classList.remove('hidden');
+                }
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Processando...';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
