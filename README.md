@@ -8,7 +8,7 @@ Este projeto foi desenvolvido durante o curso IMERSÃO IA da Alura, em colabora�
 
 **Considerações**
 
-* Foi desenvolvido para ser utilizado tanto em ambientes profissionais como pessoais, sem restrições baseadas em situação corporativa (e.g., não exige email corporativo, não se limita a uso profissional).
+* Foi desenvolvido para ser utilizado tanto em ambientes profissionais como pessoais, sem restrições.
 * O foco é democratizar o acesso à informação sobre oportunidades de engajamento social.
 * Estou providênciando o projeto de 2 maneiras
     - Arquivo comentado linha por linha do Google Colab - Projeto-Alura-AgenteSocial.ipynb - Para quem quer ter um entendimento melhor do que cada linha está fazendo.
