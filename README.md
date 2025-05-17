@@ -14,6 +14,7 @@ Este projeto foi desenvolvido durante o curso IMERSÃO IA da Alura, em colabora�
     - Arquivo comentado linha por linha do Google Colab - Projeto-Alura-AgenteSocial.ipynb - Para quem quer ter um entendimento melhor do que cada linha está fazendo.
     - App usando Flask, transformando o código e trazendo uma experiência visual (web) do assistente.
 * Para quem não conseguir executar, a pasta IMAGENS trará um overview de como o programa funciona em uma interface web.
+* Para a versão web existe um arquivo .env que guarda a chave de API. Por segurança e para compartilhamento do projeto, a chave foi removida do arquivo. 
 
 
 🎯 **Funcionalidades**
